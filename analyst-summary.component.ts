@@ -17,6 +17,10 @@ import { GetAnalystListResponse } from "app/credit/services/get-analyst-list-res
 import { Analyst } from "app/credit/services/Analyst";
 import * as _ from "lodash";
 
+/*
+Credit Analyst component contains logic to evaluate whether the client is eligible for credit approval. When the client 
+buys a logistics package from the concerned business, they are subjected to a series of credit bureau validation and verification.
+*/
 @Component({
 	selector: 'credit-analyst-summary',
 	templateUrl: './analyst-summary.component.html',
