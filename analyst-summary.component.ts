@@ -152,7 +152,7 @@ export class CreditAnalystSummaryComponent implements OnInit {
 	}
 
 	getBillingSelectionData() {
-		var BillingSelection = this.creditService.getBillingSectionList().then((result: any) => {
+		var BillingSelection = this.creditService.getBillingSectionList().subscribe((result: any) => {
 			this.billingReqList = result.billingRequirements;
 		})
 		return BillingSelection;
