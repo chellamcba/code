@@ -99,6 +99,7 @@ export class CreditAnalystSummaryComponent implements OnInit {
 		}
 	}
 
+	//loads the client side analyst summary data using two parallel HTTP calls using forkjoin.
 	loadAnalystSummaryView() {
 		let AnalystList = this.getAnalystList();
 		let CreditApplicationDetail = this.getCreditApplicationData();
@@ -108,17 +109,19 @@ export class CreditAnalystSummaryComponent implements OnInit {
 			this.selectedStatusAssigned = preselectStatus && preselectStatus.length > 0 && preselectStatus[0] || undefined;
 			this.valueStatusChange();
 			this.setBillingReqList();
-		}, err => console.error(err));
+		});
 	}
 
+	//loads the summmary view making two parallel calls (CreditApplicationDetail and BillingSelection)
 	loadAgentSummaryView() {
 		let CreditApplicationDetail = this.getCreditApplicationData();
 		let BillingSelection = this.getBillingSelectionData();
 		forkJoin(CreditApplicationDetail, BillingSelection).subscribe(() => {
 			this.setBillingReqList();
-		}, err => console.error(err));
+		});
 	}
 
+	//Client Analyst HTTP calls are initiated
 	getAnalystList() {
 		var analystList = this.creditService.getAnalystList().subscribe((result: GetAnalystListResponse) => {
 			if (result && result.analysts && !result.errors.hasErrors) {
@@ -130,8 +133,9 @@ export class CreditAnalystSummaryComponent implements OnInit {
 		return analystList;
 	}
 
+	//credit application data is pulled using get credit request HTTP GET REST call and the global variables are being populated.
 	getCreditApplicationData() {
-		var creditApplicationDetails = this.creditService.getCreditRequest.subscribe(this.creditService.CreditRequestIdFromAnalystDashboard).subscribe((result: GetCreditApplicationDetailResponse) => {
+		var creditApplicationDetails = this.creditService.getCreditRequest(this.creditService.CreditRequestIdFromAnalystDashboard).subscribe((result: GetCreditApplicationDetailResponse) => {
 			if (result && result.creditApplicationDetail) {
 
 				this.model = this.preProcessCredit(result.creditApplicationDetail);
@@ -155,6 +159,7 @@ export class CreditAnalystSummaryComponent implements OnInit {
 		return creditApplicationDetails;
 	}
 
+	//billing seclection data is being pulled and populated in public variables.
 	getBillingSelectionData() {
 		var BillingSelection = this.creditService.getBillingSectionList().subscribe((result: any) => {
 			this.billingReqList = result.billingRequirements;
@@ -254,6 +259,7 @@ export class CreditAnalystSummaryComponent implements OnInit {
 		this.model = this.preProcessCreditShipperSection(beforeProcessing);
 	}
 
+	//processing of the credit application based on prerequsite condition.
 	private preProcessCredit(creditDetailClone: CreditApplicationDetail) {
 		//Step 1: 
 		//if (creditApplicationDetail.shipperNumber != creditApplicationDetail.updatedShipperNumber) {
@@ -272,6 +278,7 @@ export class CreditAnalystSummaryComponent implements OnInit {
 		return creditDetailClone;
 	}
 
+	//based on shipping status the shipping number is evaluated
 	private evaluateShipperNumber(credit: CreditApplicationDetail) {
 		if (!this.isShipperIncorrect)
 			this.evaluatedShipperNumber = credit.updatedShipperNumber ? credit.updatedShipperNumber : (credit.shipperNumber || null);
@@ -280,6 +287,7 @@ export class CreditAnalystSummaryComponent implements OnInit {
 
 	}
 
+	//processing of the client side credit billing section.
 	private preProcessCreditBillToSection(creditDetailClone: CreditApplicationDetail) {
 		creditDetailClone.updatedBilling = creditDetailClone.updatedBilling || new Address();
 		creditDetailClone.originalBilling = creditDetailClone.originalBilling || new Address();
@@ -332,6 +340,7 @@ export class CreditAnalystSummaryComponent implements OnInit {
 		return creditDetailClone;
 	}
 
+	//processing of the credit shipper section is done here.
 	private preProcessCreditShipperSection(creditDetailClone: CreditApplicationDetail) {
 		creditDetailClone.updatedShipper = creditDetailClone.updatedShipper || new Address();
 		creditDetailClone.originalShipper = creditDetailClone.originalShipper || new Address();
