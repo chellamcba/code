@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, filter, concatMap, tap } from 'rxjs/operators';
 
+// This component is the ts file for the presentation file.
+// It calls the NOAA REST API to pull the weather data based on the city name.
+
 @Component({
   selector: 'app-weather-report',
   templateUrl: './weather-report.component.html',
