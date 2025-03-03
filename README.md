@@ -5,4 +5,6 @@ The Credit Analyst component contains logic to evaluate whether the client is el
 reducer.operations.ts: 
 The reducer operation is part of NgRx file structure. Reducer in NgRx is a pure function responsible for handling state transitions in an Angular application. It takes the current state and an action as input and returns a new state based on the action's type. Reducers determine how the application's state changes in response to dispatched actions. They must be pure functions, meaning they always produce the same output for the same input and have no side effects.
 
- 
+weather-report.component.ts:
+weather.service.ts:
+The weather report component pulls the NOAA weather data from the weather.service.ts and displays.
